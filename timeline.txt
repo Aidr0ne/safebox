@@ -1,0 +1,39 @@
+API:
+
+    WINTER (AUTH)
+    /login - provide username and password to recieve session id
+    /register - provide username and password to register an account
+
+    HOUSE MANAGEMENT:
+    /clear - deletes every single file in house                                    - DONE - 0.0.1
+    /download_repo - Downloads a single repo from an author                        - DONE - 0.0.1
+    /download_author - Downloads every repo from an author                         - DONE - 0.0.1
+    /delete_author - Deletes every repo from an author                             - DONE - 0.0.1
+    /delete_file - deletes a single file                                           - DONE - 0.0.1
+    /file_count - Returns total amount of files                                    -
+    /read_repo - Returns README from a given repo                                  - 
+
+    AUTHOR CONFIG                                                                   
+    /ban_author - Stops an author from being downloaded                            -
+
+
+    APP CONFIG
+    /add_env_variable                                                              -
+    /set_start - Configures what script is run for a given Repo                    -
+    /set_python_ver - Configures python Version To use (Downloads it system wide)  -
+    /download_package - Downloads a package from pip                               -
+    /download_requirements - Downloads packages from a repos requirements.txt      -
+    /return_config
+
+    HOUSE RUNNER
+
+
+Timeline:
+
+0.0.1
+    API:
+    /clear
+    /download_repo
+    /download_author
+    /delete_author
+    /delete_file
