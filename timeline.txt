@@ -1,8 +1,8 @@
 TODO:
-    IMPLEMENT - Authentication
+    IMPLEMENT - Authentication - DONE
     IMPLEMENT - App Configs
     IMPLEMENT - Abstracted sql manager
-    IMPLEMENT - Return Classes
+    IMPLEMENT - Return Classes - PARTIAL (Implemented errors)
     IMPLEMENT - Request error checks
 
 
@@ -49,3 +49,6 @@ Timeline:
     API:
     /winter/login
     /winter/register
+0.0.3
+    IMPLEMENTED Authentication
+    PARTIALIALY IMPLEMENTED Return classes

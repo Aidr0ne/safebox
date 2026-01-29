@@ -9,6 +9,7 @@ from pathlib import Path
 import shutil
 from sqlmodel import Field, Session, SQLModel, create_engine, select 
 import random
+from codes import *
 
 sqlite_file_name = "data/database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
@@ -63,13 +64,24 @@ async def register(req: tp.register_request, session: SessionDep):
 
     return {}
 
+def authenticate(cookie_id, session: Annotated) -> bool:
+    statement = select(User).where(User.cookie_id == cookie_id)
+    item = session.exec(statement).first()
+    if item:
+        return True
+    return False
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
 
 @app.get("/clear")
-async def clear():
+async def clear(req: tp.Basic):
+    if not authenticate(req.cookie_id, SessionDep):
+        raise E401(
+            detail="User Not Signed In!"
+        )
     os.system("rm -rf house")
     os.system("mkdir house")
     return {"message": "Clearing the house"}
@@ -86,18 +98,25 @@ def download_rep(link: str):
 
 @app.post("/house/download/repo")
 async def download_repo(req: tp.house_download):
+    if not authenticate(req.cookie_id, SessionDep):
+        raise E401(
+            detail="User Not Signed In!"
+        )
     item = f"https://github.com/{req.author}/{req.repo}"
     download_rep(item)
     return {"message": f"Downloading {item}"}
 
 @app.post("/house/download/author")
 async def download_author(req: tp.house_download):
+    if not authenticate(req.cookie_id, SessionDep):
+        raise E401(
+            detail="User Not Signed In!"
+        )
     author_name = req.author
     res = requests.get(f"https://api.github.com/users/{author_name}/repos")
     if res.status_code == 404:
-        raise HTTPException(
-            status_code=404,
-            detail="author Not found"
+        raise E404(
+            detail="Author Not Found"
         )
     else:
         data = res.json()
@@ -109,28 +128,34 @@ async def download_author(req: tp.house_download):
 
 @app.delete("/house/delete/author")
 async def delete_author(req: tp.house_remove):
+    if not authenticate(req.cookie_id, SessionDep):
+        raise E401(
+            detail="User Not Signed In!"
+        )
     author_name = req.author
     p = Path(f"/home/aiden/safebox/house/{author_name}")
     if p.exists:
         shutil.rmtree(str(p))
     else:
-        raise HTTPException(
-            status_code=404,
+        raise E404(
             detail="Author Not Found"
         )
     return {}
 
 @app.delete("/house/delete/repo")
 async def delete_repo(req: tp.house_remove):
+    if not authenticate(req.cookie_id, SessionDep):
+        raise E401(
+            detail="User Not Signed In!"
+        )
     repo_name = req.repo
     author_name = req.author
     p = Path(f"/home/aiden/safebox/house/{author_name}/{repo_name}")
     if p.exists:
         shutil.rmtree(str(p))
     else:
-        raise HTTPException(
-            status_code=404,
-            detail="Author Not Found"
+        raise E404(
+            detail="Repo Not Found"
         )
     return {}
 
