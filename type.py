@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 
-class login_request(BaseModel):
-    pass
-
 class register_request(BaseModel):
+    username: str
+    password: str
+
+class login_request(register_request):
     pass
 
 class house_download(BaseModel):

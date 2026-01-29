@@ -1,20 +1,66 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 import os
 from hashlib import sha256
 import type as tp
-import requests # pyright: ignore[reportMissingModuleSource]
+from typing import Annotated
+import requests 
 from pathlib import Path
 import shutil
+from sqlmodel import Field, Session, SQLModel, create_engine, select 
+import random
+
+sqlite_file_name = "data/database.db"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
+
+connect_args = {"check_same_thread": False}
+engine = create_engine(sqlite_url, connect_args=connect_args)
 
 app = FastAPI()
 
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+
+SessionDep = Annotated[Session, Depends(get_session)]
+
+class User(SQLModel, table=True): # type: ignore
+    usename: str = Field(primary_key=True)
+    password: str = Field()
+    cookie_id: int | None = Field(index=True, default=None)
 
 class request(BaseModel):
     target_link: str | None = None
 
+@app.on_event("startup")
+async def start():
+    SQLModel.metadata.create_all(engine)
+
 @app.post("/winter/login")
-async def login(req: request):
+async def login(req: tp.login_request, session: SessionDep):
+    name = req.username
+    pw = req.password
+    us: User = session.get(User, name) # type: ignore
+    if us.cookie_id != None:
+        return {"Cookie": us.cookie_id}
+    elif pw == us.password:
+        us.cookie_id = random.randint(0, 100000000)
+        session.add(us)
+        session.commit()
+        return {"Cookie": us.cookie_id}
+
+    return {}
+
+@app.post("/winter/register")
+async def register(req: tp.register_request, session: SessionDep):
+    name = req.username
+    pw = req.password
+    us = User(usename=name, password=pw)
+    session.add(us)
+    session.commit()
+    session.refresh(us)
+
     return {}
 
 @app.get("/")

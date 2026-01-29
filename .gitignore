@@ -9,6 +9,7 @@ __pycache__/
 
 house/
 Author_repos.txt
+data/
 
 # Distribution / packaging
 .Python

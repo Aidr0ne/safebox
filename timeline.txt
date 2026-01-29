@@ -1,8 +1,16 @@
+TODO:
+    IMPLEMENT - Authentication
+    IMPLEMENT - App Configs
+    IMPLEMENT - Abstracted sql manager
+    IMPLEMENT - Return Classes
+    IMPLEMENT - Request error checks
+
+
 API:
 
     WINTER (AUTH)
-    /login - provide username and password to recieve session id
-    /register - provide username and password to register an account
+    /login - provide username and password to recieve session id                   - DONE - 0.0.2
+    /register - provide username and password to register an account               - DONE - 0.0.2
 
     HOUSE MANAGEMENT:
     /clear - deletes every single file in house                                    - DONE - 0.0.1
@@ -37,3 +45,7 @@ Timeline:
     /download_author
     /delete_author
     /delete_file
+0.0.2
+    API:
+    /winter/login
+    /winter/register
