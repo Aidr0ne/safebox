@@ -22,7 +22,8 @@ API:
     /read_repo - Returns README from a given repo                                  - 
 
     AUTHOR CONFIG                                                                   
-    /ban_author - Stops an author from being downloaded                            -
+    /ban_author - Stops an author from being downloaded                            - DONE - 0.0.4
+    /unban/author - Unbans an author from being downloaded                         - DONE - 0.0.4
 
 
     APP CONFIG
@@ -52,3 +53,9 @@ Timeline:
 0.0.3
     IMPLEMENTED Authentication
     PARTIALIALY IMPLEMENTED Return classes
+0.0.4
+    API:
+    /ban_author
+    /unban/author
+    NOTES
+    Ready to implement Configs for each repo

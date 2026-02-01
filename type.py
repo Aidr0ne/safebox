@@ -16,3 +16,7 @@ class house_download(Basic):
 
 class house_remove(house_download):
     pass
+
+class house_ban(Basic):
+    author: str 
+    repo : str
